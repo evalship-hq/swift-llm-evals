@@ -9,7 +9,7 @@ Clone this repo, or use it as a template. Then:
 ```sh
 export ANTHROPIC_API_KEY=sk-ant-...
 swift build -c release   # the first build takes a while; later runs start fast
-./tinyeval
+swift run tinyeval
 ```
 
 ```
@@ -25,9 +25,9 @@ All 3 evals passed (eval-results.json)
 
 - `Sources/Support/Support.swift`: the bot. `Support().answer(message)` sends the message to Claude and returns the reply. Swift has no official Anthropic SDK, so it calls the Messages API with URLSession and Codable.
 - `prompts/support.md`: the system prompt.
-- `Sources/evalworker/main.swift`: the tinyeval worker. It builds `Support` once, then answers each test case.
+- `Sources/evalworker/main.swift`: the tinyeval worker. It builds `Support` once, then answers each test case with the `Tinyeval` helper.
 - `evals/support.sh`: three test cases, each checked by a regex, a judge or both.
-- `tinyeval`: the eval runner, one bash file.
+- `Package.swift`: only the worker depends on [tinyeval-swift](https://github.com/evalship-hq/tinyeval-swift), so your app doesn't link it.
 - `.github/workflows/evals.yml`: runs the evals on every pull request and push to main.
 
 ## Use it for your app
@@ -37,7 +37,7 @@ All 3 evals passed (eval-results.json)
 3. In an iOS or macOS app, keep the AI call in a Swift package or a target without UIKit or SwiftUI imports, so the worker can call it from the command line. The bot reads its prompt from the checkout, so make the prompt a resource in an app you ship.
 4. In a Vapor app, build the service once in the worker and call it in the loop.
 
-When the API call fails for a reason that isn't your code, such as a missing key, a rate limit or a timeout, the worker replies `#tinyeval couldnt_run`. tinyeval then counts the test case as couldn't run, not as failed.
+When the API call fails for a reason that isn't your code, such as a missing key, a rate limit or a timeout, the worker throws `Tinyeval.CouldntRun`. tinyeval counts the test case as couldn't run, apart from the failures, and still exits 1. A bug in your own code stays a failure.
 
 ## In CI
 
@@ -46,6 +46,10 @@ Add `ANTHROPIC_API_KEY` as a repository secret under **Settings** > **Secrets an
 The workflow builds the package with the Swift that ubuntu-latest ships, and caches `.build`. Then it runs each test case 3 times, and a test case passes when at least 2 of the 3 pass. A failing eval fails the job, so you can require it before merging. The results upload as the `eval-results` artifact, also when an eval fails.
 
 Without the secret, the workflow skips the evals and prints a notice. Pull requests from forks get no secrets, so their evals skip too.
+
+## Updating
+
+Dependabot opens a weekly pull request when tinyeval or an action has a new version. Dependabot pull requests get no secrets either, so their evals skip with the same notice. To update tinyeval yourself, run `swift package update tinyeval-swift`.
 
 ## Compare pull requests with main
 

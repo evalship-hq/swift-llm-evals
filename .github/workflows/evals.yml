@@ -13,10 +13,10 @@ jobs:
       - uses: actions/cache@v6
         with:
           path: .build
-          key: ${{ runner.os }}-swift-${{ hashFiles('Package.swift', 'Sources/**') }}
+          key: ${{ runner.os }}-swift-${{ hashFiles('Package.swift', 'Package.resolved', 'Sources/**') }}
           restore-keys: ${{ runner.os }}-swift-
       - run: swift --version && swift build -c release
-      - run: ./tinyeval -n 3
+      - run: swift run tinyeval -n 3
         if: env.ANTHROPIC_API_KEY != ''
       - run: echo "::notice::Add the ANTHROPIC_API_KEY repository secret to run the evals."
         if: env.ANTHROPIC_API_KEY == ''

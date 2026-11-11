@@ -1,0 +1,15 @@
+{
+  "originHash" : "d38880605f0bc37f11075d1e709ee971a869643df35f4e4bc7395790e00b1b54",
+  "pins" : [
+    {
+      "identity" : "tinyeval-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/evalship-hq/tinyeval-swift",
+      "state" : {
+        "revision" : "8ee1f117656d368c81c85945b813f61f7ac675ac",
+        "version" : "0.11.0"
+      }
+    }
+  ],
+  "version" : 3
+}
