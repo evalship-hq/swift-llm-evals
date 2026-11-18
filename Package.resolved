@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/evalship-hq/tinyeval-swift",
       "state" : {
-        "revision" : "8ee1f117656d368c81c85945b813f61f7ac675ac",
-        "version" : "0.11.0"
+        "revision" : "671b15a703562df23b6bc590015d73810efb23bb",
+        "version" : "0.11.1"
       }
     }
   ],
